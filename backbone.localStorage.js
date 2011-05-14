@@ -22,6 +22,24 @@ window.Store = function(name) {
 
 _.extend(Store.prototype, {
 
+  // Remove all saved data from localStorage (useful for testing)
+  empty: function() {
+    var key, keysForRemoval, name, i,st;
+    keysForRemoval = [];
+    st = window.localStorage;
+    for (i = 0; i < st.length; i++) {
+      key = st[i];
+      name = key.split('-', 1)[0];
+      if (name === this.name) {
+        keysForRemoval.push(key);
+      }
+    }
+    for (i = 0; i < keysForRemoval.length; i++) {
+      key = keysForRemoval[i];
+      window.localStorage.removeItem(key);
+    }
+  },
+
   // Save the current state of the **Store** to *localStorage*.
   save: function() {
     localStorage.setItem(this.name, this.records.join(","));
