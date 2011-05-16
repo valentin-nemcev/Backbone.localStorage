@@ -16,8 +16,7 @@ function guid() {
 // with a meaningful name, like the name you'd give a table.
 window.Store = function(name) {
   this.name = name;
-  var store = localStorage.getItem(this.name);
-  this.records = (store && store.split(",")) || [];
+  this.load();
 };
 
 _.extend(Store.prototype, {
@@ -38,6 +37,13 @@ _.extend(Store.prototype, {
       key = keysForRemoval[i];
       window.localStorage.removeItem(key);
     }
+    this.load();
+  },
+
+  // Load current state from *localStorage* to the **Store**.
+  load: function() {
+    var store = localStorage.getItem(this.name);
+    this.records = (store && store.split(",")) || [];
   },
 
   // Save the current state of the **Store** to *localStorage*.
