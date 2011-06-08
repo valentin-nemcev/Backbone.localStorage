@@ -16,6 +16,8 @@ function guid() {
 // with a meaningful name, like the name you'd give a table.
 window.Store = function(name) {
   this.name = name;
+  this.async = false;
+  this.asyncDelay = 50;
   this.load();
 };
 
@@ -113,7 +115,11 @@ Backbone.localSync = function(method, model, options, error) {
   }
 
   if (resp) {
-    options.success(resp);
+    if(store.async) {
+      setTimeout(function(){options.success(resp)}, store.asyncDelay);
+    } else {
+      options.success(resp);
+    }
   } else {
     options.error("Record not found");
   }
